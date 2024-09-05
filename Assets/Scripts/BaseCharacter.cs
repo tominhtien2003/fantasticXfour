@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class BaseCharacter : MonoBehaviour
 {
+    public LayerMask groundMask;
     public float speed;
     public float jumpForce;
-    private enum Direction
+    protected enum Direction
     {
         Left,           // Trái
         Right,          // Phải
@@ -16,12 +17,16 @@ public class BaseCharacter : MonoBehaviour
         BackwardLeft,   // Chéo xuống trái
         BackwardRight   // Chéo xuống phải
     }
-    private Dictionary<Direction, Vector3> directionDictionary;
+    protected Dictionary<Direction, Vector3> directionDictionary = new Dictionary<Direction, Vector3>();
+    protected Transform currentCharacter;
+    protected Vector3 destination;
+    protected Collider _collider;
     private void Start()
     {
-        InitDirection();
+        Debug.Log("aa");
+        InitDirectionDictionary();
     }
-    private void InitDirection()
+    private void InitDirectionDictionary()
     {
         directionDictionary = new Dictionary<Direction, Vector3>
         {
@@ -35,40 +40,72 @@ public class BaseCharacter : MonoBehaviour
             { Direction.BackwardRight, Vector3.back + Vector3.right }
         };
     }
-    public void MoveForward(Vector3 destination)
+    public void MoveForward()
     {
 
     }
-    public void MoveBackward(Vector3 destination)
+    public void MoveBackward()
     {
 
     }
-    public void MoveLeft(Vector3 destination)
+    public void MoveLeft()
     {
 
     }
-    public void MoveRight(Vector3 destination)
+    public void MoveRight()
     {
 
     }
-    public void MoveForwardLeft(Vector3 destination)
+    public void MoveForwardLeft()
     {
 
     }
-    public void MoveForwardRight(Vector3 destination)
+    public void MoveForwardRight()
     {
 
     }
-    public void MoveBackwardLeft(Vector3 destination)
+    public void MoveBackwardLeft()
     {
 
     }
-    public void MoveBackwardRight(Vector3 destination)
+    public void MoveBackwardRight()
     {
 
     }
-    public void Jump(Vector3 Start, Vector3 destination)
+    public void Jump()
     {
 
+    }
+    public void SetCollider(Collider colliderTarget)
+    {
+        _collider = colliderTarget;
+    }
+    public void SetCharacter(Transform transformTarget)
+    {
+        currentCharacter = transformTarget;
+    }
+    public virtual void PredictionDirectionPlayer()
+    {
+
+    }
+    public GameObject GetGameobjectCurrent()
+    {
+        if (Physics.Raycast(currentCharacter.position, Vector3.down, out RaycastHit hitInfo, 10f, groundMask))
+        {
+            if (hitInfo.collider != null)
+            {
+                return hitInfo.collider.gameObject;
+            }
+            else
+            {
+                Debug.LogWarning("currentBlock is null");
+                return null;
+            }
+        }
+        else
+        {
+            Debug.LogWarning("currentBlock is null");
+            return null;
+        }
     }
 }
