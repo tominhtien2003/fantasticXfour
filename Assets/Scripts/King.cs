@@ -4,60 +4,50 @@ using UnityEngine;
 
 public class King : BaseCharacter
 {
-    private List<GameObject> objectChose;
+    private List<GameObject> objectChose = new List<GameObject>();
     private List<Vector3> directionKing = new List<Vector3>();
     private void Start()
     {
+        InitDirectionDictionary();
         SetCharacter(transform);
         InitDirection();
         PredictionDirectionPlayer();
     }
     private void InitDirection()
     {
-        Debug.Log(directionDictionary.Count);
         foreach (var direction in directionDictionary)
         {
-            Debug.Log(direction.Value);
-            //directionKing.Add(direction.Value);
+            directionKing.Add(direction.Value);
         }
     }
     public override void PredictionDirectionPlayer()
     {
         base.PredictionDirectionPlayer();
-        foreach (Vector3 directionPlayer in directionKing)
+        GameObject startObject = GetGameobjectStart();
+
+        objectChose.Clear();
+
+        Collider[] colliders = Physics.OverlapSphere(startObject.transform.position, 1f, groundMask);
+        Debug.Log(colliders.Length);
+
+        foreach (Collider collider in colliders)
         {
-            GameObject currentObject = GetGameobjectCurrent();
-            Vector3 direction = directionPlayer;
-            while (currentObject != null)
+            if (collider != null && collider.gameObject != startObject)
             {
-                Debug.Log("" + currentObject.name);
-                if (Physics.Raycast(currentObject.transform.position, direction, out RaycastHit hitInfo, 2f))
-                {
-                    if (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
-                    {
-                        currentObject = hitInfo.collider.gameObject;
-                    }
-                    else
-                    {
-                        if (Physics.Raycast(currentObject.transform.position + Vector3.up, direction, out RaycastHit hitInfoUp, 2f))
-                        {
-                            currentObject = hitInfoUp.collider.gameObject;
-                        }
-                        else if (Physics.Raycast(currentObject.transform.position - Vector3.up, direction, out RaycastHit hitInfoDown, 2f))
-                        {
-                            currentObject = hitInfoDown.collider.gameObject;
-                        }
-                        else
-                        {
-                            currentObject = null;
-                        }
-                    }
-                }
-                else
-                {
-                    currentObject = null;
-                }
+                objectChose.Add(collider.gameObject);
+                Debug.Log("" + collider.gameObject.name + "");
             }
         }
     }
+    #if DrawTriiger
+    private void OnDrawGizmos()
+    {
+        GameObject startObject = GetGameobjectStart();
+        if (startObject != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(startObject.transform.position, 1f);
+        }
+    }
+    #endif
 }

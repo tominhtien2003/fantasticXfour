@@ -8,25 +8,19 @@ public class BaseCharacter : MonoBehaviour
     public float jumpForce;
     protected enum Direction
     {
-        Left,           // Trái
-        Right,          // Phải
-        Forward,        // Trước
-        Backward,       // Sau
-        ForwardLeft,    // Chéo lên trái
-        ForwardRight,   // Chéo lên phải
-        BackwardLeft,   // Chéo xuống trái
-        BackwardRight   // Chéo xuống phải
+        Left,
+        Right,
+        Forward,
+        Backward,
+        ForwardLeft,
+        ForwardRight,
+        BackwardLeft,
+        BackwardRight
     }
     protected Dictionary<Direction, Vector3> directionDictionary = new Dictionary<Direction, Vector3>();
     protected Transform currentCharacter;
     protected Vector3 destination;
-    protected Collider _collider;
-    private void Start()
-    {
-        Debug.Log("aa");
-        InitDirectionDictionary();
-    }
-    private void InitDirectionDictionary()
+    public void InitDirectionDictionary()
     {
         directionDictionary = new Dictionary<Direction, Vector3>
         {
@@ -34,10 +28,10 @@ public class BaseCharacter : MonoBehaviour
             { Direction.Right, Vector3.right },
             { Direction.Forward, Vector3.forward },
             { Direction.Backward, Vector3.back },
-            { Direction.ForwardLeft, Vector3.forward + Vector3.left },
-            { Direction.ForwardRight, Vector3.forward + Vector3.right },
-            { Direction.BackwardLeft, Vector3.back + Vector3.left },
-            { Direction.BackwardRight, Vector3.back + Vector3.right }
+            { Direction.ForwardLeft, (Vector3.forward + Vector3.left).normalized },
+            { Direction.ForwardRight, (Vector3.forward + Vector3.right).normalized },
+            { Direction.BackwardLeft, (Vector3.back + Vector3.left).normalized },
+            { Direction.BackwardRight, (Vector3.back + Vector3.right).normalized }
         };
     }
     public void MoveForward()
@@ -76,10 +70,6 @@ public class BaseCharacter : MonoBehaviour
     {
 
     }
-    public void SetCollider(Collider colliderTarget)
-    {
-        _collider = colliderTarget;
-    }
     public void SetCharacter(Transform transformTarget)
     {
         currentCharacter = transformTarget;
@@ -88,9 +78,13 @@ public class BaseCharacter : MonoBehaviour
     {
 
     }
-    public GameObject GetGameobjectCurrent()
+    public GameObject GetGameobjectStart()
     {
-        if (Physics.Raycast(currentCharacter.position, Vector3.down, out RaycastHit hitInfo, 10f, groundMask))
+        if (currentCharacter == null)
+        {
+            return null;
+        }
+        if (Physics.Raycast(currentCharacter.position, Vector3.down, out RaycastHit hitInfo, 1f, groundMask))
         {
             if (hitInfo.collider != null)
             {
@@ -98,13 +92,13 @@ public class BaseCharacter : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("currentBlock is null");
+                Debug.LogWarning("GetGameobjectStart is null");
                 return null;
             }
         }
         else
         {
-            Debug.LogWarning("currentBlock is null");
+            Debug.LogWarning("GetGameobjectStart is null");
             return null;
         }
     }

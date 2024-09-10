@@ -13,6 +13,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: wallBrick01 Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 148829053491584042, guid: ee7fd6802273d254a997dc023ac0b61c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4614847059137656507, guid: ee7fd6802273d254a997dc023ac0b61c,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
