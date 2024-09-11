@@ -7,9 +7,13 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
 <<<<<<< HEAD
+<<<<<<< HEAD
     path: Assets/Scenes/Lobby.unity
 =======
     path: Assets/Scenes/Map 1.unity
 >>>>>>> 340ef4d20db1cd362df401519910ba984944dead
+=======
+    path: Assets/Scenes/Main.unity
+>>>>>>> iam_tuan
     guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects: {}
