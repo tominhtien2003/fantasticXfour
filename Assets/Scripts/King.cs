@@ -20,6 +20,10 @@ public class King : BaseCharacter
             directionKing.Add(direction.Value);
         }
     }
+    private void Update()
+    {
+        Debug.Log(GetMoveDirection());
+    }
     public override void PredictionDirectionPlayer()
     {
         base.PredictionDirectionPlayer();
@@ -39,7 +43,7 @@ public class King : BaseCharacter
             }
         }
     }
-    #if DrawTriiger
+    #region DrawGizmos
     private void OnDrawGizmos()
     {
         GameObject startObject = GetGameobjectStart();
@@ -49,5 +53,5 @@ public class King : BaseCharacter
             Gizmos.DrawWireSphere(startObject.transform.position, 1f);
         }
     }
-    #endif
+    #endregion
 }

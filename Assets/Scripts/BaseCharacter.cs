@@ -102,4 +102,43 @@ public class BaseCharacter : MonoBehaviour
             return null;
         }
     }
+    public GameObject GetObjectFromMousePosition()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundMask))
+            {
+                GameObject selectedObject = hit.collider.gameObject;
+                return selectedObject;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        else
+        {
+            Debug.Log("You muse click mouse left");
+            return null;
+        }
+    }
+    public Vector3 GetMoveDirection()
+    {
+        Vector3 moveDirection = Vector3.zero;
+
+        GameObject objectClicked = GetObjectFromMousePosition();
+        GameObject startObject = GetGameobjectStart();
+        if (startObject != null && objectClicked != null)
+        {
+            Debug.Log(objectClicked.name);
+            moveDirection = objectClicked.transform.position - startObject.transform.position;
+        }
+        return moveDirection.normalized;
+    }
+    public void Move()
+    {
+
+    }
 }
