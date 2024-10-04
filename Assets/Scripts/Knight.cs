@@ -1,6 +1,8 @@
-using UnityEngine;
-
-public class Knight : MonoBehaviour
+public class Knight : BasePiece
 {
-    
+    private void Start()
+    {
+        pieceType = PieceType.Knight;
+        GetCurrentBlockWhenStartGame();
+    }
 }

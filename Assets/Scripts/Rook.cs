@@ -1,6 +1,8 @@
-using UnityEngine;
-
-public class Rook : MonoBehaviour
+public class Rook : BasePiece
 {
-    
+    private void Start()
+    {
+        pieceType = PieceType.Rook;
+        GetCurrentBlockWhenStartGame();
+    }
 }
