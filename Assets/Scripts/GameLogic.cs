@@ -62,13 +62,16 @@ public class GameLogic : MonoBehaviour
                 context.SetStrategy(new KingPredictMoveStrategy());
                 break;
             case PieceType.Queen:
+                context.SetStrategy(new QueenPredictMoveStrategy());
                 break;
             case PieceType.Bishop:
+                context.SetStrategy(new  BishopPredictMoveStrategy());
                 break;
             case PieceType.Rook:
                 context.SetStrategy(new  RookPredictMoveStrategy());
                 break;
             case PieceType.Knight:
+                context.SetStrategy(new KnightPredictMoveStrategy());
                 break;
             default:
                 break;

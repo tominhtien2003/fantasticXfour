@@ -20,35 +20,53 @@ public class RookPredictMoveStrategy : IPredictionMovePieceStrategy
     private void GetBlocksPredict(Block block)
     {
         Board board = Board.Instance;
-        Vector3Int rootPos = block.GetPositionInBoard();  // Vị trí hiện tại của quân cờ
+        Vector3Int rootPos = block.GetPositionInBoard(); 
 
-        // Duyệt qua từng hướng
         foreach (var dir in directions)
         {
             Vector3Int newPos = rootPos + dir;
 
-            while (board.GetBlockAtPosition(newPos.x, newPos.y, newPos.z) != null)
+            while (true)
             {
                 Block nextBlock = board.GetBlockAtPosition(newPos.x, newPos.y, newPos.z);
+                if (nextBlock == null) break;
 
                 if (nextBlock.tag == "CanNotMove")
                 {
-                    // Nếu gặp vật cản, kiểm tra khối phía trên
-                    Block aboveBlock = board.GetBlockAtPosition(newPos.x, newPos.y, newPos.z + 1);
-                    if (aboveBlock != null && aboveBlock.tag != "CanNotMove")
+                    Block aboveBlock = CheckAboveBlock(newPos);
+                    if (aboveBlock != null)
                     {
-                        GameLogic.Instance.blocksSelected.Add(aboveBlock);
-                        aboveBlock.blockState = BlockState.Selected;
+                        AddBlockToSelection(aboveBlock);
+                        if (aboveBlock.GetCurrentPiece() != null)
+                            break;
                     }
+                    else break;
                 }
                 else
                 {
-                    // Nếu không có vật cản, đánh dấu ô hiện tại là có thể di chuyển tới
-                    GameLogic.Instance.blocksSelected.Add(nextBlock);
-                    nextBlock.blockState = BlockState.Selected;
+                    AddBlockToSelection(nextBlock);
+                    if (nextBlock.GetCurrentPiece() != null)
+                        break;
                 }
                 newPos += dir;
             }
         }
+    }
+
+    private Block CheckAboveBlock(Vector3Int pos)
+    {
+        Board board = Board.Instance;
+        Block aboveBlock = board.GetBlockAtPosition(pos.x, pos.y, pos.z + 1);
+        if (aboveBlock != null && aboveBlock.tag != "CanNotMove")
+        {
+            return aboveBlock;
+        }
+        return null;
+    }
+
+    private void AddBlockToSelection(Block block)
+    {
+        GameLogic.Instance.blocksSelected.Add(block);
+        block.blockState = BlockState.Selected;
     }
 }
