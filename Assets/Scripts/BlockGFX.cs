@@ -1,22 +1,52 @@
 ﻿using UnityEngine;
-using System.Collections;  // Thêm thư viện này để sử dụng Coroutine
+using System.Collections;
 
 public class BlockGFX : MonoBehaviour
 {
     private Block logicBlock;
-    private Coroutine hidePanelCoroutine;  // Để lưu trữ Coroutine hiện tại
+    private Coroutine hidePanelCoroutine;
+    private bool isMouseOver = false;
+    public LayerMask groundMask;
 
     private void Awake()
     {
         logicBlock = GetComponentInParent<Block>();
     }
 
-    private void OnMouseEnter()
+    private void Update()
     {
-        if (logicBlock.blockState == BlockState.Normal)
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit , Mathf.Infinity,groundMask))
         {
-            return;
+            if (hit.transform == transform)
+            {
+                if (!isMouseOver)
+                {
+                    HandleMouseEnter();
+                }
+                isMouseOver = true;
+            }
+            else
+            {
+                if (isMouseOver)
+                {
+                    HandleMouseExit();
+                }
+                isMouseOver = false;
+            }
         }
+        else if (isMouseOver)
+        {
+            HandleMouseExit();
+            isMouseOver = false;
+        }
+    }
+
+    private void HandleMouseEnter()
+    {
+        if (logicBlock.blockState == BlockState.Normal) return;
 
         Block currentBlock = Board.Instance.GetCurrentBlock();
 
@@ -24,7 +54,7 @@ public class BlockGFX : MonoBehaviour
         {
             Board.Instance.SetCurrentBlock(logicBlock);
 
-            if (currentBlock != null)
+            if (currentBlock != null && currentBlock.GetPanelUIConfirm().activeSelf)
             {
                 currentBlock.GetPanelUIConfirm().SetActive(false);
             }
@@ -32,27 +62,28 @@ public class BlockGFX : MonoBehaviour
 
         if (logicBlock.blockState == BlockState.Selected)
         {
-            // Bật panel UI
             logicBlock.GetPanelUIConfirm().SetActive(true);
 
-            // Nếu có Coroutine trước đó đang chạy, hủy nó (không cần đếm ngược nếu chuột vẫn ở đây)
             if (hidePanelCoroutine != null)
             {
                 StopCoroutine(hidePanelCoroutine);
+                hidePanelCoroutine = null;
             }
         }
     }
 
-    private void OnMouseExit()
+    private void HandleMouseExit()
     {
-        // Bắt đầu Coroutine để tắt panel sau 3 giây khi chuột rời khỏi
+        if (hidePanelCoroutine != null)
+        {
+            StopCoroutine(hidePanelCoroutine);
+        }
         hidePanelCoroutine = StartCoroutine(HidePanelAfterDelay(3f));
     }
 
-    // Coroutine để tắt panel sau khoảng thời gian
     private IEnumerator HidePanelAfterDelay(float delay)
     {
-        yield return new WaitForSeconds(delay);  // Đợi trong khoảng thời gian (3 giây)
-        logicBlock.GetPanelUIConfirm().SetActive(false);  // Tắt PanelUIConfirm
+        yield return new WaitForSeconds(delay);
+        logicBlock.GetPanelUIConfirm().SetActive(false);
     }
 }

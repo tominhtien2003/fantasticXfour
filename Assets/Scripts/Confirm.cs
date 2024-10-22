@@ -8,7 +8,7 @@ public class Confirm : MonoBehaviour
     }
     public void ButtonYes()
     {
-
+        GameLogic.Instance.GetCurrentPiece().HandleMovement();
     }
     public void ButtonNo()
     {

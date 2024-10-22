@@ -2,71 +2,74 @@
 
 public class RookPredictMoveStrategy : IPredictionMovePieceStrategy
 {
-    // Các hướng đi (lên, xuống, trái, phải)
+    // 4 hướng di chuyển (trực tiếp)
     private Vector3Int[] directions = new Vector3Int[4]
     {
-        new Vector3Int(1, 0, 0),   //forward
-        new Vector3Int(-1, 0, 0),  //backward
-        new Vector3Int(0, 1, 0),   //right
-        new Vector3Int(0, -1, 0),  //left
+        new Vector3Int(1, 0, 0),   // Right
+        new Vector3Int(-1, 0, 0),  // Left
+        new Vector3Int(0, 1, 0),   // Up
+        new Vector3Int(0, -1, 0)   // Down
     };
 
     public void PredictMove()
     {
         BasePiece currentPiece = GameLogic.Instance.GetCurrentPiece();
-        GetBlocksPredict(currentPiece.GetCurrentBlock());
+        PredictMovesForRook(currentPiece.GetCurrentBlock());
     }
 
-    private void GetBlocksPredict(Block block)
+    private void PredictMovesForRook(Block block)
     {
         Board board = Board.Instance;
-        Vector3Int rootPos = block.GetPositionInBoard(); 
+        Vector3Int rootPos = block.GetPositionInBoard();
 
         foreach (var dir in directions)
         {
-            Vector3Int newPos = rootPos + dir;
-
-            while (true)
-            {
-                Block nextBlock = board.GetBlockAtPosition(newPos.x, newPos.y, newPos.z);
-                if (nextBlock == null) break;
-
-                if (nextBlock.tag == "CanNotMove")
-                {
-                    Block aboveBlock = CheckAboveBlock(newPos);
-                    if (aboveBlock != null)
-                    {
-                        AddBlockToSelection(aboveBlock);
-                        if (aboveBlock.GetCurrentPiece() != null)
-                            break;
-                    }
-                    else break;
-                }
-                else
-                {
-                    AddBlockToSelection(nextBlock);
-                    if (nextBlock.GetCurrentPiece() != null)
-                        break;
-                }
-                newPos += dir;
-            }
+            PredictInDirection(board, rootPos, dir);
         }
     }
 
-    private Block CheckAboveBlock(Vector3Int pos)
+    private void PredictInDirection(Board board, Vector3Int rootPos, Vector3Int dir)
     {
-        Board board = Board.Instance;
-        Block aboveBlock = board.GetBlockAtPosition(pos.x, pos.y, pos.z + 1);
-        if (aboveBlock != null && aboveBlock.tag != "CanNotMove")
+        Vector3Int newPos = rootPos + dir;
+
+        while (true)
         {
-            return aboveBlock;
+            Block nextBlock = board.GetBlockAtPosition(newPos.x, newPos.y, newPos.z);
+
+            if (!HandleBlockSelection(nextBlock, newPos, board))
+            {
+                break;
+            }
+
+            newPos += dir;
         }
-        return null;
     }
 
-    private void AddBlockToSelection(Block block)
+    private bool HandleBlockSelection(Block block, Vector3Int currentPos, Board board)
+    {
+        if (block == null || block.tag == "CanNotMove")
+        {
+            for (int offset = -1; offset <= 1; offset++)
+            {
+                Block adjacentBlock = board.GetBlockAtPosition(currentPos.x, currentPos.y, currentPos.z + offset);
+                if (adjacentBlock != null && adjacentBlock.tag != "CanNotMove")
+                {
+                    SelectBlock(adjacentBlock);
+                    return adjacentBlock.GetCurrentPiece() == null;
+                }
+            }
+            return false;
+        }
+
+        SelectBlock(block);
+        return block.GetCurrentPiece() == null;
+    }
+
+    private void SelectBlock(Block block)
     {
         GameLogic.Instance.blocksSelected.Add(block);
+        GameObject selectedObject = ObjectPooler.Instance.GetPoolObject("Selected", new Vector3(0, .5f, 0), Quaternion.identity, block.transform);
+        block.SetSelectedObject(selectedObject);
         block.blockState = BlockState.Selected;
     }
 }

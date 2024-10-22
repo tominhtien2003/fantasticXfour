@@ -8,6 +8,7 @@ public class Block : MonoBehaviour
     private BasePiece currentPiece;
     private Vector3Int positionInBoard;
     private BlockState _blockState;
+    private GameObject selectedObject;
     public BlockState blockState
     {
         get { return _blockState; }
@@ -30,7 +31,19 @@ public class Block : MonoBehaviour
     }
     private void OnBlockStateChange()
     {
-        selected?.SetActive(blockState == BlockState.Selected);
+        //GameObject objectSelected = ObjectPooler.Instance.GetPoolObject("Selected", new Vector3(0, .5f, 0), Quaternion.identity, transform);
+        ////objectSelected?.SetActive(blockState == BlockState.Selected);
+        if (blockState == BlockState.Normal)
+        {
+            selectedObject.SetActive(false);
+            selectedObject.transform.SetParent(ObjectPooler.Instance.transform);
+        }
+        else
+        {
+            selectedObject.SetActive(true);
+        }
+        //selectedObject?.SetActive(blockState == BlockState.Selected); 
+        //selected?.SetActive(blockState == BlockState.Selected); 
     }
     public Vector3Int GetPositionInBoard()
     {
@@ -51,5 +64,13 @@ public class Block : MonoBehaviour
     public void SetCurrentPiece(BasePiece newPiece)
     {
         currentPiece = newPiece;
+    }
+    public GameObject GetSelectedObject()
+    {
+        return selectedObject;
+    }
+    public void SetSelectedObject(GameObject newSelectedObject)
+    {
+        selectedObject = newSelectedObject;
     }
 }

@@ -18,41 +18,35 @@ public class KnightPredictMoveStrategy : IPredictionMovePieceStrategy
     public void PredictMove()
     {
         BasePiece currentPiece = GameLogic.Instance.GetCurrentPiece();
-        GetBlocksPredict(currentPiece.GetCurrentBlock());
+        PredictMovesForKnight(currentPiece.GetCurrentBlock());
     }
 
-    private void GetBlocksPredict(Block block)
+    private void PredictMovesForKnight(Block block)
     {
         Board board = Board.Instance;
-        Vector3Int rootPos = block.GetPositionInBoard();  
+        Vector3Int rootPos = block.GetPositionInBoard();
 
         foreach (var dir in directions)
         {
             Vector3Int newPos = rootPos + dir;
-            Block nextBlock = board.GetBlockAtPosition(newPos.x, newPos.y, newPos.z);
-
-            if (nextBlock != null)
+            for (int i = -2; i <= 2; i++)
             {
-                if (nextBlock.tag != "CanNotMove")
-                {
-                    GameLogic.Instance.blocksSelected.Add(nextBlock);
-                    nextBlock.blockState = BlockState.Selected;
-
-                }
-                else
-                {
-                    nextBlock = board.GetBlockAtPosition(newPos.x,newPos.y, newPos.z + 1);
-                    if (nextBlock.tag != "CanNotMove")
-                    {
-                        GameLogic.Instance.blocksSelected.Add(nextBlock);
-                        nextBlock.blockState = BlockState.Selected;
-                    }
-                    else
-                    {
-
-                    }
-                }
+                Block aboveBlock = board.GetBlockAtPosition(newPos.x, newPos.y, newPos.z + i);
+                if (AddBlockIfValid(aboveBlock)) break;
             }
         }
+    }
+
+    private bool AddBlockIfValid(Block block)
+    {
+        if (block == null || block.tag == "CanNotMove") return false;
+
+        GameLogic.Instance.blocksSelected.Add(block);
+
+        GameObject selectedObject = ObjectPooler.Instance.GetPoolObject("Selected", new Vector3(0, .5f, 0), Quaternion.identity, block.transform);
+        block.SetSelectedObject(selectedObject);
+        block.blockState = BlockState.Selected;
+
+        return true;
     }
 }

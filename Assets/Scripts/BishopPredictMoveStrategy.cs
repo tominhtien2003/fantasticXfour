@@ -5,72 +5,71 @@ public class BishopPredictMoveStrategy : IPredictionMovePieceStrategy
     // 4 hướng đi chéo
     private Vector3Int[] directions = new Vector3Int[4]
     {
-        new Vector3Int(1, 1, 0),   
-        new Vector3Int(1, -1, 0),  
-        new Vector3Int(-1, 1, 0),  
-        new Vector3Int(-1, -1, 0) 
+        new Vector3Int(1, 1, 0),    // Diagonal right up
+        new Vector3Int(1, -1, 0),   // Diagonal right down
+        new Vector3Int(-1, 1, 0),   // Diagonal left up
+        new Vector3Int(-1, -1, 0)   // Diagonal left down
     };
 
     public void PredictMove()
     {
         BasePiece currentPiece = GameLogic.Instance.GetCurrentPiece();
-        GetBlocksPredict(currentPiece.GetCurrentBlock());
+        PredictMovesForBishop(currentPiece.GetCurrentBlock());
     }
 
-    private void GetBlocksPredict(Block block)
+    private void PredictMovesForBishop(Block block)
     {
         Board board = Board.Instance;
-        Vector3Int rootPos = block.GetPositionInBoard();  
+        Vector3Int rootPos = block.GetPositionInBoard();
 
         foreach (var dir in directions)
         {
-            Vector3Int newPos = rootPos + dir;
+            PredictInDirection(board, rootPos, dir);
+        }
+    }
 
-            while (true)
+    private void PredictInDirection(Board board, Vector3Int rootPos, Vector3Int dir)
+    {
+        Vector3Int newPos = rootPos + dir;
+
+        while (true)
+        {
+            Block nextBlock = board.GetBlockAtPosition(newPos.x, newPos.y, newPos.z);
+
+            if (!HandleBlockSelection(nextBlock, newPos, board))
             {
-                Block nextBlock = board.GetBlockAtPosition(newPos.x, newPos.y, newPos.z);
-                if (nextBlock == null)
+                break;
+            }
+
+            newPos += dir;
+        }
+    }
+
+    private bool HandleBlockSelection(Block block, Vector3Int currentPos, Board board)
+    {
+        if (block == null || block.tag == "CanNotMove")
+        {
+            for (int offset = -2; offset <= 2; offset++)
+            {
+                Block adjacentBlock = board.GetBlockAtPosition(currentPos.x, currentPos.y, currentPos.z + offset);
+                if (adjacentBlock != null && adjacentBlock.tag != "CanNotMove")
                 {
-                    break;
-                }
-                else
-                {
-                    if (nextBlock.tag == "CanNotMove")
-                    {
-                        Block aboveBlock = board.GetBlockAtPosition(newPos.x, newPos.y, newPos.z + 1);
-                        if (aboveBlock != null && aboveBlock.tag != "CanNotMove")
-                        {
-                            GameLogic.Instance.blocksSelected.Add(aboveBlock);
-                            aboveBlock.blockState = BlockState.Selected;
-                            if (aboveBlock.GetCurrentPiece() != null)
-                            {
-                                break;
-                            }
-                            else
-                            {
-                                newPos += dir;
-                            }
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        GameLogic.Instance.blocksSelected.Add(nextBlock);
-                        nextBlock.blockState = BlockState.Selected;
-                        if (nextBlock.GetCurrentPiece() != null)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            newPos += dir;
-                        }
-                    }
+                    SelectBlock(adjacentBlock);
+                    return adjacentBlock.GetCurrentPiece() == null;
                 }
             }
+            return false;
         }
+
+        SelectBlock(block);
+        return block.GetCurrentPiece() == null;
+    }
+
+    private void SelectBlock(Block block)
+    {
+        GameLogic.Instance.blocksSelected.Add(block);
+        GameObject selectedObject = ObjectPooler.Instance.GetPoolObject("Selected", new Vector3(0, .5f, 0), Quaternion.identity, block.transform);
+        block.SetSelectedObject(selectedObject);
+        block.blockState = BlockState.Selected;
     }
 }

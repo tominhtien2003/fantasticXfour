@@ -2,68 +2,62 @@
 
 public class KingPredictMoveStrategy : IPredictionMovePieceStrategy
 {
-    //row,column,height
     private Vector3Int[] directions = new Vector3Int[8]
     {
-        new Vector3Int(1, 0, 0),   //forward
-        new Vector3Int(-1, 0, 0),  //backward
-        new Vector3Int(0, 1, 0),   //right
-        new Vector3Int(0, -1, 0),  //left
-        new Vector3Int(1, 1, 0),   //forwardRight
-        new Vector3Int(1, -1, 0),  //forwardLeft
-        new Vector3Int(-1, 1, 0),  //BackwardRight
-        new Vector3Int(-1, -1, 0)  //BackwardLeft
+        new Vector3Int(1, 0, 0),
+        new Vector3Int(-1, 0, 0),
+        new Vector3Int(0, 1, 0),
+        new Vector3Int(0, -1, 0),
+        new Vector3Int(1, 1, 0),
+        new Vector3Int(1, -1, 0),
+        new Vector3Int(-1, 1, 0),
+        new Vector3Int(-1, -1, 0)
     };
 
     public void PredictMove()
     {
-        BasePiece currentPiece = GameLogic.Instance.GetCurrentPiece();
-        GetBlocksPredict(currentPiece.GetCurrentBlock());
+        var currentPiece = GameLogic.Instance.GetCurrentPiece();
+        var currentBlock = currentPiece.GetCurrentBlock();
+        PredictMovesForKing(currentBlock);
     }
 
-    private void GetBlocksPredict(Block block)
+    private void PredictMovesForKing(Block block)
     {
-        Board board = Board.Instance;
-        Vector3Int rootPos = block.GetPositionInBoard();
+        var board = Board.Instance;
+        var rootPos = block.GetPositionInBoard();
 
         foreach (var dir in directions)
         {
             Vector3Int newPos = rootPos + dir;
             Block adjacentBlock = board.GetBlockAtPosition(newPos.x, newPos.y, newPos.z);
 
-            if (adjacentBlock == null) continue;
+            if (adjacentBlock == null && newPos.z == 0) continue;
 
-            int height = GetHeightAtPosition(newPos, board); // Kiểm tra độ cao tại vị trí mới
-
-            if (height == 1)
-            {
-                GameLogic.Instance.blocksSelected.Add(adjacentBlock);
-                adjacentBlock.blockState = BlockState.Selected;
-            }
-            else if (height == 2)
-            {
-                Block topBlock = board.GetBlockAtPosition(newPos.x, newPos.y, newPos.z + 1);
-                if (topBlock != null)
-                {
-                    GameLogic.Instance.blocksSelected.Add(topBlock);
-                    topBlock.blockState = BlockState.Selected;
-                }
-            }
+            HandleBlockSelection(newPos, adjacentBlock, board);
         }
     }
-
-    private int GetHeightAtPosition(Vector3Int position, Board board)
+    private void HandleBlockSelection(Vector3Int newPos, Block block, Board board)
     {
-        int height = 1;
-        Vector3Int checkPos = position;
-
-        while (board.GetBlockAtPosition(checkPos.x, checkPos.y, checkPos.z + 1) != null)
+        for (int offset = -1; offset <= 1; offset++)
         {
-            height++;
-            checkPos.z += 1;
-            if (height == 3) break;
-        }
+            //if (offset == 0) continue; 
 
-        return height;
+            Vector3Int checkPos = new Vector3Int(newPos.x, newPos.y, newPos.z + offset);
+            Block targetBlock = board.GetBlockAtPosition(checkPos.x, checkPos.y, checkPos.z);
+
+            if (targetBlock != null && targetBlock.tag != "CanNotMove")
+            {
+                SelectBlock(targetBlock);
+            }
+        }
     }
+    private void SelectBlock(Block block)
+    {
+        GameLogic.Instance.blocksSelected.Add(block);
+
+        GameObject selectedObject = ObjectPooler.Instance.GetPoolObject("Selected", new Vector3(0, .5f, 0), Quaternion.identity, block.transform);
+        block.SetSelectedObject(selectedObject);
+        block.blockState = BlockState.Selected;
+    }
+
 }
