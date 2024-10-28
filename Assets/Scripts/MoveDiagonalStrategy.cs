@@ -98,6 +98,11 @@ public class MoveDiagonalStrategy : IMovePieceStrategy
                 yield return piece.IEMoveFlat(startPos, endPos);
             }
         }
+        Block endBlock = blocks[blocks.Count - 1];
+        Block startBlock = blocks[0];
+        piece.SetCurrentBlock(endBlock);
+        endBlock.SetCurrentPiece(piece);
+        startBlock.SetCurrentPiece(null);
     }
     private bool HaveObstacle(Block block, Vector3Int dir)
     {

@@ -102,6 +102,12 @@ public class MoveHorizontalVerticalStrategy : IMovePieceStrategy
                 yield return piece.IEMoveFlat(startPos, endPos);
             }
         }
+        Block endBlock = blocks[blocks.Count - 1];
+        Block startBlock = blocks[0];
+        piece.SetCurrentBlock(endBlock);
+        endBlock.SetCurrentPiece(piece);
+        startBlock.SetCurrentPiece(null);
+        //Debug.Log(startBlock.GetCurrentPiece() + " Have");
     }
 
     private bool IsJumping(Block startBlock, Block endBlock)
