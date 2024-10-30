@@ -29,7 +29,7 @@ public class KnightPredictMoveStrategy : IPredictionMovePieceStrategy
         foreach (var dir in directions)
         {
             Vector3Int newPos = rootPos + dir;
-            for (int i = -2; i <= 2; i++)
+            for (int i = -5; i <= 5; i++)
             {
                 Block aboveBlock = board.GetBlockAtPosition(newPos.x, newPos.y, newPos.z + i);
                 if (AddBlockIfValid(aboveBlock)) break;
@@ -43,7 +43,7 @@ public class KnightPredictMoveStrategy : IPredictionMovePieceStrategy
 
         GameLogic.Instance.blocksSelected.Add(block);
 
-        GameObject selectedObject = ObjectPooler.Instance.GetPoolObject("Selected", new Vector3(0, .5f, 0), Quaternion.identity, block.transform);
+        GameObject selectedObject = ObjectPooler.Instance.GetPoolObject("Selected", new Vector3(0, .51f, 0), Quaternion.identity, block.transform);
         block.SetSelectedObject(selectedObject);
         block.blockState = BlockState.Selected;
 

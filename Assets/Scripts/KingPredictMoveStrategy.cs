@@ -38,7 +38,7 @@ public class KingPredictMoveStrategy : IPredictionMovePieceStrategy
     }
     private void HandleBlockSelection(Vector3Int newPos, Block block, Board board)
     {
-        for (int offset = -1; offset <= 1; offset++)
+        for (int offset = -5; offset <= 5; offset++)
         {
             //if (offset == 0) continue; 
 
@@ -55,7 +55,7 @@ public class KingPredictMoveStrategy : IPredictionMovePieceStrategy
     {
         GameLogic.Instance.blocksSelected.Add(block);
 
-        GameObject selectedObject = ObjectPooler.Instance.GetPoolObject("Selected", new Vector3(0, .5f, 0), Quaternion.identity, block.transform);
+        GameObject selectedObject = ObjectPooler.Instance.GetPoolObject("Selected", new Vector3(0, .51f, 0), Quaternion.identity, block.transform);
         block.SetSelectedObject(selectedObject);
         block.blockState = BlockState.Selected;
     }

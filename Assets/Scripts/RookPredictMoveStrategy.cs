@@ -49,7 +49,7 @@ public class RookPredictMoveStrategy : IPredictionMovePieceStrategy
     {
         if (block == null || block.tag == "CanNotMove")
         {
-            for (int offset = -1; offset <= 1; offset++)
+            for (int offset = -3; offset <= 3; offset++)
             {
                 Block adjacentBlock = board.GetBlockAtPosition(currentPos.x, currentPos.y, currentPos.z + offset);
                 if (adjacentBlock != null && adjacentBlock.tag != "CanNotMove")
@@ -68,7 +68,7 @@ public class RookPredictMoveStrategy : IPredictionMovePieceStrategy
     private void SelectBlock(Block block)
     {
         GameLogic.Instance.blocksSelected.Add(block);
-        GameObject selectedObject = ObjectPooler.Instance.GetPoolObject("Selected", new Vector3(0, .5f, 0), Quaternion.identity, block.transform);
+        GameObject selectedObject = ObjectPooler.Instance.GetPoolObject("Selected", new Vector3(0, .51f, 0), Quaternion.identity, block.transform);
         block.SetSelectedObject(selectedObject);
         block.blockState = BlockState.Selected;
     }
