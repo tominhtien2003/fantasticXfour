@@ -54,13 +54,20 @@ public class BishopPredictMoveStrategy : IPredictionMovePieceStrategy
                 Block adjacentBlock = board.GetBlockAtPosition(currentPos.x, currentPos.y, currentPos.z + offset);
                 if (adjacentBlock != null && adjacentBlock.tag != "CanNotMove")
                 {
+                    if (adjacentBlock.GetCurrentPiece() != null && adjacentBlock.GetCurrentPiece().chessSide == GameLogic.Instance.GetCurrentChessSide())
+                    {
+                        return false;
+                    }
                     SelectBlock(adjacentBlock);
                     return adjacentBlock.GetCurrentPiece() == null;
                 }
             }
             return false;
         }
-
+        if (block.GetCurrentPiece() != null && block.GetCurrentPiece().chessSide == GameLogic.Instance.GetCurrentChessSide())
+        {
+            return false;
+        }
         SelectBlock(block);
         return block.GetCurrentPiece() == null;
     }

@@ -6,10 +6,15 @@ public class BasePiece : MonoBehaviour
     [SerializeField] float moveSpeed;
     [SerializeField] LayerMask groundMask;
 
+    public Rigidbody rb;
+
     protected Block currentBlock;
     public PieceType pieceType;
     public ChessSide chessSide;
-
+    private void Awake()
+    {
+        rb = GetComponentInChildren<Rigidbody>();
+    }
     protected void GetCurrentBlockWhenStartGame()
     {
         if (Physics.Raycast(transform.position,Vector3.down,out RaycastHit hitInfo, .5f, groundMask))
@@ -33,6 +38,8 @@ public class BasePiece : MonoBehaviour
     }
     public void HandleMovement()
     {
+        SetUpWhenMoving();
+
         MovePieceContext context = new MovePieceContext();
         switch (pieceType)
         {
@@ -51,6 +58,16 @@ public class BasePiece : MonoBehaviour
         context.ExcuteStrategy();
 
         GameLogic.Instance.ClearListBlockSelected(true);
+    }
+    private void SetUpWhenMoving()
+    {
+        rb.isKinematic = true;
+        rb.mass = 2;
+    }
+    public void SetUpWhenStop()
+    {
+        rb.isKinematic = false;
+        rb.mass = 1;
     }
     public void HandleIdle()
     {

@@ -53,20 +53,27 @@ public class QueenPredictMoveStrategy : IPredictionMovePieceStrategy
     {
         if (block == null || block.tag == "CanNotMove")
         {
-            for (int offset = -5; offset <= 5; offset ++) 
+            for (int offset = -5; offset <= 5; offset++)
             {
                 Block adjacentBlock = board.GetBlockAtPosition(currentPos.x, currentPos.y, currentPos.z + offset);
                 if (adjacentBlock != null && adjacentBlock.tag != "CanNotMove")
                 {
+                    if (adjacentBlock.GetCurrentPiece() != null && adjacentBlock.GetCurrentPiece().chessSide == GameLogic.Instance.GetCurrentChessSide())
+                    {
+                        return false;
+                    }
                     SelectBlock(adjacentBlock);
-                    return adjacentBlock.GetCurrentPiece() == null; 
+                    return adjacentBlock.GetCurrentPiece() == null;
                 }
             }
-            return false; 
+            return false;
         }
-
+        if (block.GetCurrentPiece() != null && block.GetCurrentPiece().chessSide == GameLogic.Instance.GetCurrentChessSide())
+        {
+            return false;
+        }
         SelectBlock(block);
-        return block.GetCurrentPiece() == null; 
+        return block.GetCurrentPiece() == null;
     }
 
     private void SelectBlock(Block block)

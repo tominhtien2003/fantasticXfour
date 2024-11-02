@@ -46,10 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2d0ff360b4eb174daefb179af67bfc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
+  moveSpeed: 5
   groundMask:
     serializedVersion: 2
     m_Bits: 64
+  rb: {fileID: 0}
   pieceType: 3
   chessSide: 0
 --- !u!114 &6101625555042668300
@@ -77,6 +78,7 @@ GameObject:
   - component: {fileID: 1132987148761857305}
   - component: {fileID: 7177448064242018292}
   - component: {fileID: 5828915415696156672}
+  - component: {fileID: 4070456395163193946}
   m_Layer: 0
   m_Name: GFX
   m_TagString: Untagged
@@ -183,3 +185,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9260aed4ad63fe144aa623292318a3e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &4070456395163193946
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5549928334528503454}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

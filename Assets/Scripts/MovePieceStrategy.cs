@@ -109,6 +109,7 @@ public class MovePieceStrategy : IMovePieceStrategy
         piece.SetCurrentBlock(endBlock);
         endBlock.SetCurrentPiece(piece);
         startBlock.SetCurrentPiece(null);
+
     }
 
     private bool HaveObstacle(Block block, Vector3Int dir)

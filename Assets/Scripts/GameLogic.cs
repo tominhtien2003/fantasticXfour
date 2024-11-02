@@ -45,6 +45,10 @@ public class GameLogic : MonoBehaviour
             SetTurn(Turn.Player);
         }
     }
+    public ChessSide GetCurrentChessSide()
+    {
+        return currentPiece.chessSide;
+    }
     public BasePiece GetCurrentPiece()
     {
         return currentPiece;

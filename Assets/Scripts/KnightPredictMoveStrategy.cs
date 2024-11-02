@@ -39,7 +39,7 @@ public class KnightPredictMoveStrategy : IPredictionMovePieceStrategy
 
     private bool AddBlockIfValid(Block block)
     {
-        if (block == null || block.tag == "CanNotMove") return false;
+        if (block == null || block.tag == "CanNotMove" || (block.GetCurrentPiece()!=null && block.GetCurrentPiece().chessSide == GameLogic.Instance.GetCurrentChessSide())) return false;
 
         GameLogic.Instance.blocksSelected.Add(block);
 

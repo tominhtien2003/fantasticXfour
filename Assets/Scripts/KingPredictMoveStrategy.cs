@@ -40,13 +40,16 @@ public class KingPredictMoveStrategy : IPredictionMovePieceStrategy
     {
         for (int offset = -5; offset <= 5; offset++)
         {
-            //if (offset == 0) continue; 
-
             Vector3Int checkPos = new Vector3Int(newPos.x, newPos.y, newPos.z + offset);
             Block targetBlock = board.GetBlockAtPosition(checkPos.x, checkPos.y, checkPos.z);
 
-            if (targetBlock != null && targetBlock.tag != "CanNotMove")
+            if (targetBlock != null && targetBlock.tag != "CanNotMove" )
             {
+                if (targetBlock.GetCurrentPiece() != null && targetBlock.GetCurrentPiece().chessSide == GameLogic.Instance.GetCurrentChessSide())
+                {
+                    break;
+                }
+
                 SelectBlock(targetBlock);
             }
         }

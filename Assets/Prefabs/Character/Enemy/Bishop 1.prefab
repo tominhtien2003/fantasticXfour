@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b449346fab18a0147863a215d495af54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
+  moveSpeed: 5
   groundMask:
     serializedVersion: 2
     m_Bits: 64
@@ -64,6 +64,7 @@ GameObject:
   - component: {fileID: 3354434805865878251}
   - component: {fileID: 6321067878735923144}
   - component: {fileID: 982838511552837118}
+  - component: {fileID: 8961164772078774111}
   m_Layer: 0
   m_Name: GFX
   m_TagString: Untagged
@@ -170,3 +171,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9260aed4ad63fe144aa623292318a3e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &8961164772078774111
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6811885625031929556}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
