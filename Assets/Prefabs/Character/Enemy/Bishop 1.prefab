@@ -49,6 +49,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 64
+  rb: {fileID: 0}
   pieceType: 2
   chessSide: 1
 --- !u!1 &6811885625031929556

@@ -38,8 +38,6 @@ public class BasePiece : MonoBehaviour
     }
     public void HandleMovement()
     {
-        SetUpWhenMoving();
-
         MovePieceContext context = new MovePieceContext();
         switch (pieceType)
         {
@@ -59,15 +57,10 @@ public class BasePiece : MonoBehaviour
 
         GameLogic.Instance.ClearListBlockSelected(true);
     }
-    private void SetUpWhenMoving()
-    {
-        rb.isKinematic = true;
-        rb.mass = 2;
-    }
-    public void SetUpWhenStop()
+    public void SetUpWhenIsTarget()
     {
         rb.isKinematic = false;
-        rb.mass = 1;
+        rb.mass = .1f;
     }
     public void HandleIdle()
     {
@@ -76,7 +69,7 @@ public class BasePiece : MonoBehaviour
     public IEnumerator IEJumpCurve(Vector3 startPos, Vector3 endPos, Vector3 middlePos)
     {
         float elapsedTime = 0f;
-        float jumpDuration = 1f;
+        float jumpDuration = .5f;
 
         while (elapsedTime < jumpDuration)
         {
@@ -106,5 +99,14 @@ public class BasePiece : MonoBehaviour
         }
         transform.position = endPos;
         
+    }
+    public void TurnOffSelf(float timer)
+    {
+        StartCoroutine(IETurnOffSelf(timer));
+    }
+    private IEnumerator IETurnOffSelf(float timer)
+    {
+        yield return new WaitForSeconds(timer);
+        gameObject.SetActive(false);
     }
 }

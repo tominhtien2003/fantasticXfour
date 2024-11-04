@@ -8,6 +8,7 @@ public class Block : MonoBehaviour
     private BasePiece currentPiece;
     private Vector3Int positionInBoard;
     private BlockState _blockState;
+
     private GameObject selectedObject;
     public BlockState blockState
     {
@@ -36,7 +37,7 @@ public class Block : MonoBehaviour
         if (blockState == BlockState.Normal)
         {
             selectedObject.SetActive(false);
-            selectedObject.transform.SetParent(ObjectPooler.Instance.transform);
+            //selectedObject.transform.SetParent(ObjectPooler.Instance.transform);
         }
         else
         {

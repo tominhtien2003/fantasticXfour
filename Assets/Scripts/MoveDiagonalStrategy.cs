@@ -20,7 +20,7 @@ public class MoveDiagonalStrategy : IMovePieceStrategy
         blocks.Add(currentPiece.GetCurrentBlock());
 
         await CollectBlocks(startPos, endPos, dir);
-
+        
         currentPiece.StartCoroutine(MoveAlongPath(currentPiece , dir));
     }
 
@@ -100,6 +100,7 @@ public class MoveDiagonalStrategy : IMovePieceStrategy
         }
         Block endBlock = blocks[blocks.Count - 1];
         Block startBlock = blocks[0];
+
         piece.SetCurrentBlock(endBlock);
         endBlock.SetCurrentPiece(piece);
         startBlock.SetCurrentPiece(null);

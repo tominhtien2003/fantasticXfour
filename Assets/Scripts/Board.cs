@@ -5,7 +5,7 @@ using UnityEngine;
 public class Board : MonoBehaviour
 {
     private static Board instance;
-    public static Board Instance { get { return  instance; } }
+    public static Board Instance { get { return instance; } }
     [SerializeField] Block rootBlock;
     [SerializeField] LayerMask groundMask;
     public Block[,,] boardStoreBlock;
@@ -29,7 +29,7 @@ public class Board : MonoBehaviour
     }
     private void Start()
     {
-        
+
     }
 
     private void BuildBoardBFS()
@@ -39,7 +39,7 @@ public class Board : MonoBehaviour
 
         queue.Enqueue((rootBlock, 0, 0, 0));
         visited.Add(rootBlock);
-        SetBlockAtPosition(0, 0, 0,rootBlock);
+        SetBlockAtPosition(0, 0, 0, rootBlock);
         rootBlock.SetPositionInBoard(new Vector3Int(0, 0, 0));
 
         Vector3[] directions = { Vector3.right, Vector3.left, Vector3.forward, Vector3.back, Vector3.up, Vector3.down };
@@ -65,14 +65,14 @@ public class Board : MonoBehaviour
                     {
                         visited.Add(adjacentBlock);
                         queue.Enqueue((adjacentBlock, newRow, newCol, newHeight));
-                        SetBlockAtPosition(newRow, newCol, newHeight,adjacentBlock);
+                        SetBlockAtPosition(newRow, newCol, newHeight, adjacentBlock);
                     }
                 }
             }
         }
     }
 
-    private void SetBlockAtPosition(int row, int col, int height,Block block)
+    private void SetBlockAtPosition(int row, int col, int height, Block block)
     {
         boardStoreBlock[row, col, height] = block;
         block?.SetPositionInBoard(new Vector3Int(row, col, height));

@@ -39,11 +39,14 @@ public class KnightPredictMoveStrategy : IPredictionMovePieceStrategy
 
     private bool AddBlockIfValid(Block block)
     {
-        if (block == null || block.tag == "CanNotMove" || (block.GetCurrentPiece()!=null && block.GetCurrentPiece().chessSide == GameLogic.Instance.GetCurrentChessSide())) return false;
+        if (block == null || block.tag == "CanNotMove" || (block.GetCurrentPiece()!=null && block.GetCurrentPiece().chessSide == GameLogic.Instance.GetCurrentChessSide()))
+        {
+            return false;
+        }
 
         GameLogic.Instance.blocksSelected.Add(block);
 
-        GameObject selectedObject = ObjectPooler.Instance.GetPoolObject("Selected", new Vector3(0, .51f, 0), Quaternion.identity, block.transform);
+        GameObject selectedObject = ObjectPooler.Instance.GetPoolObject("Selected", new Vector3(0, .53f, 0), Quaternion.identity, block.transform);
         block.SetSelectedObject(selectedObject);
         block.blockState = BlockState.Selected;
 

@@ -17,8 +17,11 @@ public class KnightMoveStrategy : IMovePieceStrategy
         {
             currentPiece.StartCoroutine(currentPiece.IEJumpCurve(startPos, endPos, middlePos));
         }
+        targetBlock.GetCurrentPiece()?.TurnOffSelf(2f);
         currentPiece.SetCurrentBlock(targetBlock);
         targetBlock.SetCurrentPiece(currentPiece);
         startBlock.SetCurrentPiece(null);
+
+        
     }
 }

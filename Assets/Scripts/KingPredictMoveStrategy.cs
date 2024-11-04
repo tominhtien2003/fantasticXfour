@@ -58,7 +58,7 @@ public class KingPredictMoveStrategy : IPredictionMovePieceStrategy
     {
         GameLogic.Instance.blocksSelected.Add(block);
 
-        GameObject selectedObject = ObjectPooler.Instance.GetPoolObject("Selected", new Vector3(0, .51f, 0), Quaternion.identity, block.transform);
+        GameObject selectedObject = ObjectPooler.Instance.GetPoolObject("Selected", new Vector3(0, .53f, 0), Quaternion.identity, block.transform);
         block.SetSelectedObject(selectedObject);
         block.blockState = BlockState.Selected;
     }

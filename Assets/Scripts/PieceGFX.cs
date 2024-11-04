@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PieceGFX : MonoBehaviour
 {
@@ -23,5 +23,12 @@ public class PieceGFX : MonoBehaviour
     {
         return ((GameLogic.Instance.GetTurn() == Turn.Player && logicPiece.chessSide == ChessSide.Player)
                 || (GameLogic.Instance.GetTurn() == Turn.Enemy && logicPiece.chessSide == ChessSide.Enemy));
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (logicPiece.rb.isKinematic == false)
+        {
+
+        }
     }
 }

@@ -43,7 +43,7 @@ public class ObjectPooler : MonoBehaviour
         }
     }
 
-    public GameObject GetPoolObject(string tag, Vector3? position = null, Quaternion? rotation = null, Transform transformParent = null)
+    public GameObject GetPoolObject(string tag, Vector3 position, Quaternion rotation, Transform transformParent = null)
     {
         if (!objectPoolDictionary.ContainsKey(tag))
         {
@@ -72,16 +72,19 @@ public class ObjectPooler : MonoBehaviour
 
         objectToSpawn.transform.SetParent(transformParent);
 
-        if (transformParent != null)
-        {
-            objectToSpawn.transform.localPosition = position ?? Vector3.zero;
-            objectToSpawn.transform.localRotation = rotation ?? Quaternion.identity;
-        }
-        else
-        {
-            objectToSpawn.transform.position = position ?? objectToSpawn.transform.position;
-            objectToSpawn.transform.rotation = rotation ?? objectToSpawn.transform.rotation;
-        }
+        objectToSpawn.transform.localPosition = position;
+        objectToSpawn.transform.localRotation = rotation;
+
+        //if (transformParent != null)
+        //{
+        //    objectToSpawn.transform.localPosition = position ?? Vector3.zero;
+        //    objectToSpawn.transform.localRotation = rotation ?? Quaternion.identity;
+        //}
+        //else
+        //{
+        //    objectToSpawn.transform.position = position ?? objectToSpawn.transform.position;
+        //    objectToSpawn.transform.rotation = rotation ?? objectToSpawn.transform.rotation;
+        //}
 
         objectToSpawn.SetActive(true);
 

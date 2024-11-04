@@ -15,6 +15,7 @@ public class BlockGFX : MonoBehaviour
 
     private void Update()
     {
+        if (logicBlock.blockState == BlockState.Normal) return;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
@@ -78,12 +79,13 @@ public class BlockGFX : MonoBehaviour
         {
             StopCoroutine(hidePanelCoroutine);
         }
-        hidePanelCoroutine = StartCoroutine(HidePanelAfterDelay(3f));
+        hidePanelCoroutine = StartCoroutine(HidePanelAfterDelay(1.5f));
     }
 
     private IEnumerator HidePanelAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        logicBlock.GetPanelUIConfirm().SetActive(false);
+        logicBlock.GetPanelUIConfirm()?.SetActive(false);
     }
+    
 }

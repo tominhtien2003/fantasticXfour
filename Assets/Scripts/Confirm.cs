@@ -7,17 +7,19 @@ public class Confirm : MonoBehaviour
     private void Start()
     {
         blockParent = GetComponentInParent<Block>();
-        transform.forward = Camera.main.transform.forward;
+        
     }
 
     private void Update()
     {
+        transform.forward = Camera.main.transform.forward;
         Block currentBlock = Board.Instance.GetCurrentBlock();
 
         if (blockParent == currentBlock)
         {
             if (Input.GetKeyDown(KeyCode.V))
             {
+                blockParent.GetCurrentPiece()?.SetUpWhenIsTarget();
                 ButtonYes();
             }
             else if (Input.GetKeyDown(KeyCode.X))

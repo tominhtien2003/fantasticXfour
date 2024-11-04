@@ -18,9 +18,7 @@ public class MovePieceStrategy : IMovePieceStrategy
 
         blocks.Clear();
         blocks.Add(currentPiece.GetCurrentBlock());
-
         await CollectBlocks(startPos, endPos, dir);
-
         currentPiece.StartCoroutine(MoveAlongPath(currentPiece, dir));
     }
 
@@ -29,15 +27,15 @@ public class MovePieceStrategy : IMovePieceStrategy
         int deltaRow = endPos.x - startPos.x;
         int deltaCol = endPos.y - startPos.y;
 
-        if (deltaRow != 0 && deltaCol == 0) // Di chuyển ngang hoặc dọc
+        if (deltaRow != 0 && deltaCol == 0) 
         {
             return new Vector3Int((int)Mathf.Sign(deltaRow), 0, 0);
         }
-        else if (deltaCol != 0 && deltaRow == 0) // Di chuyển dọc hoặc ngang
+        else if (deltaCol != 0 && deltaRow == 0) 
         {
             return new Vector3Int(0, (int)Mathf.Sign(deltaCol), 0);
         }
-        else if (deltaRow != 0 && deltaCol != 0) // Di chuyển chéo
+        else if (deltaRow != 0 && deltaCol != 0) 
         {
             return new Vector3Int((int)Mathf.Sign(deltaRow), (int)Mathf.Sign(deltaCol), 0);
         }
@@ -73,7 +71,7 @@ public class MovePieceStrategy : IMovePieceStrategy
 
     private bool TryAddAdjacentBlock(Vector3Int pos)
     {
-        for (int offset = -1; offset <= 1; offset++)
+        for (int offset = -5; offset <= 5; offset++)
         {
             Block adjacentBlock = Board.Instance.GetBlockAtPosition(pos.x, pos.y, pos.z + offset);
             if (adjacentBlock != null && !adjacentBlock.CompareTag("CanNotMove"))
@@ -106,6 +104,7 @@ public class MovePieceStrategy : IMovePieceStrategy
         }
         Block endBlock = blocks[blocks.Count - 1];
         Block startBlock = blocks[0];
+        endBlock.GetCurrentPiece()?.TurnOffSelf(2f);
         piece.SetCurrentBlock(endBlock);
         endBlock.SetCurrentPiece(piece);
         startBlock.SetCurrentPiece(null);
