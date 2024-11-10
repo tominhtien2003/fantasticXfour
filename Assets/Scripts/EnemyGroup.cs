@@ -12,4 +12,11 @@ public class EnemyGroup : MonoBehaviour
             enemyList.Add(enemy);
         }
     }
+    private void Update()
+    {
+        if (enemyList.Count == 0)
+        {
+            AudioManager.Instance.PlaySFX("Win");
+        }
+    }
 }

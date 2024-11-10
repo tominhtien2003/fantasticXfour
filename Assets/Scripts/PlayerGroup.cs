@@ -12,4 +12,11 @@ public class PlayerGroup : MonoBehaviour
             playerList.Add(player);
         }
     }
+    private void Update()
+    {
+        if (playerList.Count == 0)
+        {
+            AudioManager.Instance.PlaySFX("Lose");
+        }
+    }
 }

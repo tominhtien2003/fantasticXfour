@@ -3,11 +3,25 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+    private static AudioManager instance;
+    public static AudioManager Instance { get { return instance; } }
     [SerializeField] private Sound[] musicSounds, sfxSounds;
     public AudioSource musicSource, sfxSource;
 
     private int indexMusicArray = 0;
 
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     private void Start()
     {
         PlayMusic(musicSounds[indexMusicArray].name);
