@@ -15,6 +15,7 @@ public class BlockGFX : MonoBehaviour
 
     private void Update()
     {
+        if (GameLogic.Instance.GetTurn() == Turn.Enemy) return;
         if (logicBlock.blockState == BlockState.Normal) return;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;

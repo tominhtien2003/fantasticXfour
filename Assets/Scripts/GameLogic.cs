@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public class GameLogic : MonoBehaviour
 {
+    public event EventHandler OnTurnChange;
     private static GameLogic instance;
     public static GameLogic Instance { get { return  instance; } }
 
@@ -11,6 +13,9 @@ public class GameLogic : MonoBehaviour
     private Turn turn;
 
     public List<Block> blocksSelected = new List<Block> ();
+
+    public EnemyGroup enemyGroup;
+    public PlayerGroup playerGroup;
     private void Awake()
     {
         if (instance == null)
@@ -21,14 +26,40 @@ public class GameLogic : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        enemyGroup = FindFirstObjectByType<EnemyGroup>();
+        playerGroup = FindFirstObjectByType<PlayerGroup>();
     }
     private void Start()
     {
+        OnTurnChange += GameLogic_OnTurnChange;
         turn = Turn.Player;
     }
+
+    private async void GameLogic_OnTurnChange(object sender, EventArgs e)
+    {
+        if (GetTurn() == Turn.Player)
+        {
+            return;
+        }
+        if (enemyGroup.enemyList.Count == 0) return;
+        int indexEnemyGroup = UnityEngine.Random.Range(0, enemyGroup.enemyList.Count);
+        SetCurrentPiece(enemyGroup.enemyList[indexEnemyGroup]);
+        await SelectPiece(enemyGroup.enemyList[indexEnemyGroup]);
+
+        Block block = RandomSelectBlock();
+        Board.Instance.SetCurrentBlock(block);
+
+        if (block != null && block.GetCurrentPiece() != null)
+        {
+            block.GetCurrentPiece()?.SetUpWhenIsTarget();
+        }
+        enemyGroup.enemyList[indexEnemyGroup].HandleMovement();
+    }
+
     public void SetTurn(Turn newTurn)
     {
         turn = newTurn;
+        OnTurnChange?.Invoke(this, EventArgs.Empty);
     }
     public Turn GetTurn()
     {
@@ -57,7 +88,7 @@ public class GameLogic : MonoBehaviour
     {
         currentPiece = newPiece;
     }
-    public async void SelectPiece(BasePiece piece)
+    public async Task SelectPiece(BasePiece piece)
     {
         await ClearListBlockSelected();
         PredictionMoveContext context = new PredictionMoveContext();
@@ -101,7 +132,19 @@ public class GameLogic : MonoBehaviour
             block.GetPanelUIConfirm().SetActive(false);
         }
         blocksSelected.Clear();
-
-        AutomaticChangeTurn();
+    }
+    private Block RandomSelectBlock()
+    {
+        if (blocksSelected.Count == 0) return null;
+        foreach (Block block in blocksSelected)
+        {
+            BasePiece currentPiece = block.GetCurrentPiece();
+            if (currentPiece!=null && currentPiece.chessSide == ChessSide.Player)
+            {
+                return block;
+            }
+        }
+        int id = UnityEngine.Random.Range(0, blocksSelected.Count);
+        return blocksSelected[id];
     }
 }

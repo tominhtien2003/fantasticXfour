@@ -104,10 +104,21 @@ public class MovePieceStrategy : IMovePieceStrategy
         }
         Block endBlock = blocks[blocks.Count - 1];
         Block startBlock = blocks[0];
-        endBlock.GetCurrentPiece()?.TurnOffSelf(2f);
+        endBlock.GetCurrentPiece()?.TurnOffSelf(.5f);
         piece.SetCurrentBlock(endBlock);
         endBlock.SetCurrentPiece(piece);
         startBlock.SetCurrentPiece(null);
+
+
+        float timeDelay = 1f;
+        if (GameLogic.Instance.GetTurn() == Turn.Player)
+        {
+            GameLogic.Instance.Invoke("AutomaticChangeTurn", timeDelay);
+        }
+        else
+        {
+            GameLogic.Instance.Invoke("AutomaticChangeTurn", 0.5f);
+        }
 
     }
 

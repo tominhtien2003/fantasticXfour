@@ -102,11 +102,20 @@ public class BasePiece : MonoBehaviour
     }
     public void TurnOffSelf(float timer)
     {
+        if (GameLogic.Instance.GetTurn() == Turn.Player)
+        {
+            GameLogic.Instance.enemyGroup.enemyList.Remove(this);
+        }
+        else
+        {
+            GameLogic.Instance.playerGroup.playerList.Remove(this);
+        }
         StartCoroutine(IETurnOffSelf(timer));
     }
     private IEnumerator IETurnOffSelf(float timer)
     {
         yield return new WaitForSeconds(timer);
+        
         gameObject.SetActive(false);
     }
 }
