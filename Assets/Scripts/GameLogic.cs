@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class GameLogic : MonoBehaviour
 {
@@ -41,19 +42,31 @@ public class GameLogic : MonoBehaviour
         {
             return;
         }
+        Block targetBlock;
+        BasePiece piece = enemyGroup.FindEnemyBetter(out targetBlock);
         if (enemyGroup.enemyList.Count == 0) return;
-        int indexEnemyGroup = UnityEngine.Random.Range(0, enemyGroup.enemyList.Count);
-        SetCurrentPiece(enemyGroup.enemyList[indexEnemyGroup]);
-        await SelectPiece(enemyGroup.enemyList[indexEnemyGroup]);
-
-        Block block = RandomSelectBlock();
-        Board.Instance.SetCurrentBlock(block);
-
-        if (block != null && block.GetCurrentPiece() != null)
+        if (piece != null)
         {
-            block.GetCurrentPiece()?.SetUpWhenIsTarget();
+            SetCurrentPiece(piece);
+            Board.Instance.SetCurrentBlock(targetBlock);
+            targetBlock.GetCurrentPiece()?.SetUpWhenIsTarget();
+            piece.HandleMovement();
         }
-        enemyGroup.enemyList[indexEnemyGroup].HandleMovement();
+        else
+        {
+            int indexEnemyGroup = UnityEngine.Random.Range(0, enemyGroup.enemyList.Count);
+            SetCurrentPiece(enemyGroup.enemyList[indexEnemyGroup]);
+            await SelectPiece(enemyGroup.enemyList[indexEnemyGroup]);
+
+            Block block = RandomSelectBlock();
+            Board.Instance.SetCurrentBlock(block);
+
+            if (block != null && block.GetCurrentPiece() != null)
+            {
+                block.GetCurrentPiece()?.SetUpWhenIsTarget();
+            }
+            enemyGroup.enemyList[indexEnemyGroup].HandleMovement();
+        }
     }
 
     public void SetTurn(Turn newTurn)

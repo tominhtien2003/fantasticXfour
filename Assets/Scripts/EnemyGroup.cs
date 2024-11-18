@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyGroup : MonoBehaviour
@@ -19,4 +19,67 @@ public class EnemyGroup : MonoBehaviour
             AudioManager.Instance.PlaySFX("Win");
         }
     }
+    public BasePiece FindEnemyBetter(out Block targetBlock)
+    {
+        foreach (var enemy in enemyList)
+        {
+            Block block = enemy.GetCurrentBlock();
+            Vector3Int startPos = block.GetPositionInBoard();
+
+            List<Vector2Int> directions = DirectionOfPieces.GetDirectionOfPiece(enemy);
+
+            foreach (Vector2Int dir in directions)
+            {
+                Vector3Int temp = startPos;
+
+                bool isSingleStep = enemy.pieceType == PieceType.King || enemy.pieceType == PieceType.Knight;
+
+                do
+                {
+                    temp.x += dir.x;
+                    temp.y += dir.y;
+
+                    bool check = false;
+                    for (int height = 0; height <= 3; height++)
+                    {
+                        temp.z = height;
+
+                        Block nextBlock = Board.Instance.GetBlockAtPosition(temp.x, temp.y, temp.z);
+
+                        if (nextBlock == null)
+                        {
+                            break;
+                        }
+
+                        if (nextBlock.tag != "CanNotMove")
+                        {
+                            BasePiece currentPiece = nextBlock.GetCurrentPiece();
+                            if (currentPiece != null)
+                            {
+                                if (currentPiece.chessSide == ChessSide.Player)
+                                {
+                                    targetBlock = nextBlock;
+                                    return enemy;
+                                }
+                                else
+                                {
+                                    check = true;
+                                }
+                            }
+                            break;
+                        }
+                    }
+
+                    if (isSingleStep || check)
+                    {
+                        break;
+                    }
+
+                } while (Board.Instance.GetBlockAtPosition(temp.x, temp.y, temp.z) != null);
+            }
+        }
+        targetBlock = null;
+        return null; 
+    }
+
 }
