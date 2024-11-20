@@ -11,7 +11,7 @@ public class PieceGFX : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (GameLogic.Instance.GetTurn() == Turn.Enemy)
+        if (GameLogic.Instance.GetTurn() == Turn.Enemy || GameLogic.Instance.pauseGame)
         {
             return;
         }

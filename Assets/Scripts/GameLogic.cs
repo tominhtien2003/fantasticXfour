@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public class GameLogic : MonoBehaviour
 {
     public event EventHandler OnTurnChange;
     private static GameLogic instance;
-    public static GameLogic Instance { get { return  instance; } }
+    public bool pauseGame = false;
+    public static GameLogic Instance { get { return instance; } }
 
     private BasePiece currentPiece;
     private Turn turn;
 
-    public List<Block> blocksSelected = new List<Block> ();
+    public List<Block> blocksSelected = new List<Block>();
 
     public EnemyGroup enemyGroup;
     public PlayerGroup playerGroup;
@@ -114,10 +114,10 @@ public class GameLogic : MonoBehaviour
                 context.SetStrategy(new QueenPredictMoveStrategy());
                 break;
             case PieceType.Bishop:
-                context.SetStrategy(new  BishopPredictMoveStrategy());
+                context.SetStrategy(new BishopPredictMoveStrategy());
                 break;
             case PieceType.Rook:
-                context.SetStrategy(new  RookPredictMoveStrategy());
+                context.SetStrategy(new RookPredictMoveStrategy());
                 break;
             case PieceType.Knight:
                 context.SetStrategy(new KnightPredictMoveStrategy());
@@ -129,7 +129,7 @@ public class GameLogic : MonoBehaviour
     }
     public async Task ClearListBlockSelected()
     {
-        foreach(Block block in blocksSelected)
+        foreach (Block block in blocksSelected)
         {
             block.blockState = BlockState.Normal;
             block.GetPanelUIConfirm().SetActive(false);
@@ -137,7 +137,7 @@ public class GameLogic : MonoBehaviour
         blocksSelected.Clear();
         await Task.Yield(); // Đợi đến khung hình tiếp theo để đảm bảo mọi thứ đã hoàn thành
     }
-    public void ClearListBlockSelected(bool?type = true)
+    public void ClearListBlockSelected(bool? type = true)
     {
         foreach (Block block in blocksSelected)
         {
@@ -152,7 +152,7 @@ public class GameLogic : MonoBehaviour
         foreach (Block block in blocksSelected)
         {
             BasePiece currentPiece = block.GetCurrentPiece();
-            if (currentPiece!=null && currentPiece.chessSide == ChessSide.Player)
+            if (currentPiece != null && currentPiece.chessSide == ChessSide.Player)
             {
                 return block;
             }

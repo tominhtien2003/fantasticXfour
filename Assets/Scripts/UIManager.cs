@@ -11,7 +11,6 @@ public class UIManager : MonoBehaviour
         if (Singleton == null)
         {
             Singleton = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {

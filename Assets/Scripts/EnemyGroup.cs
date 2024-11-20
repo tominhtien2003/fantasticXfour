@@ -3,9 +3,12 @@ using UnityEngine;
 
 public class EnemyGroup : MonoBehaviour
 {
+    private EndGame endGame;
     public List<BasePiece> enemyList = new List<BasePiece>();
+    private bool hasEnemyLoseSound = false;
     private void Start()
     {
+        endGame = FindFirstObjectByType<EndGame>();
         BasePiece[] enemys = GetComponentsInChildren<BasePiece>(true);
         foreach (var enemy in enemys)
         {
@@ -14,9 +17,11 @@ public class EnemyGroup : MonoBehaviour
     }
     private void Update()
     {
-        if (enemyList.Count == 0)
+        if (!hasEnemyLoseSound && enemyList.Count == 0)
         {
+            endGame.Winn();
             AudioManager.Instance.PlaySFX("Win");
+            hasEnemyLoseSound = true;
         }
     }
     public BasePiece FindEnemyBetter(out Block targetBlock)
