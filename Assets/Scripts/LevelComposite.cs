@@ -14,7 +14,7 @@ public class LevelComposite : LevelCompoent
         foreach (var level in levels)
         {
             level.numberLevel = ++countLevel;
-            if (countLevel <= 3)
+            if (countLevel <= 4)
             {
                 level.lockLevel = false;
             }

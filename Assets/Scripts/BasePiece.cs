@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BasePiece : MonoBehaviour
@@ -18,7 +17,7 @@ public class BasePiece : MonoBehaviour
     }
     protected void GetCurrentBlockWhenStartGame()
     {
-        if (Physics.Raycast(transform.position,Vector3.down,out RaycastHit hitInfo, .5f, groundMask))
+        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hitInfo, .5f, groundMask))
         {
             currentBlock = hitInfo.collider.gameObject.GetComponentInParent<Block>();
             currentBlock.SetCurrentPiece(this);
@@ -39,6 +38,7 @@ public class BasePiece : MonoBehaviour
     }
     public void HandleMovement()
     {
+        AudioManager.Instance.PlaySFX("Moving");
         MovePieceContext context = new MovePieceContext();
         switch (pieceType)
         {
@@ -88,18 +88,18 @@ public class BasePiece : MonoBehaviour
 
         transform.position = endPos;
     }
-    public IEnumerator IEMoveFlat(Vector3 startPos,Vector3 endPos)
+    public IEnumerator IEMoveFlat(Vector3 startPos, Vector3 endPos)
     {
         float totalDistance = Vector3.Distance(startPos, endPos);
         float elapsedTime = 0f;
-        while(elapsedTime < totalDistance / moveSpeed)
+        while (elapsedTime < totalDistance / moveSpeed)
         {
             transform.position = Vector3.Lerp(startPos, endPos, elapsedTime * moveSpeed / totalDistance);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
         transform.position = endPos;
-        
+
     }
     public void TurnOffSelf(float timer)
     {
@@ -116,8 +116,8 @@ public class BasePiece : MonoBehaviour
     private IEnumerator IETurnOffSelf(float timer)
     {
         yield return new WaitForSeconds(timer);
-        
+
         gameObject.SetActive(false);
     }
-    
+
 }

@@ -7572,6 +7572,8 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: d9a4185f64f1a244d86bb8198fe0f144, type: 3}
   - name: Lose
     audioClip: {fileID: 8300000, guid: 79f8bf67e266f5146b7db467c0f3b914, type: 3}
+  - name: Moving
+    audioClip: {fileID: 8300000, guid: 930bd054e64651f458544f5e960b1b68, type: 3}
   musicSource: {fileID: 714865847}
   sfxSource: {fileID: 670486877}
 --- !u!4 &377403678
@@ -15915,7 +15917,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -19279,7 +19281,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 860013040}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 860013042}
+        m_TargetAssemblyTypeName: LevelLeaf, Assembly-CSharp
+        m_MethodName: Press
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &860013040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21320,7 +21334,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 995956848}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -21518,8 +21532,8 @@ MonoBehaviour:
   maxPage: 2
   pageStep: {x: -950, y: 0, z: 0}
   levelPagesRect: {fileID: 1806827381}
-  tweenType: 0
-  tweenTime: 0.8
+  tweenType: 6
+  tweenTime: 1.5
 --- !u!1 &1017052202
 GameObject:
   m_ObjectHideFlags: 0
