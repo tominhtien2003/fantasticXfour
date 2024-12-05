@@ -515,6 +515,8 @@ MonoBehaviour:
   blocksSelected: []
   enemyGroup: {fileID: 0}
   playerGroup: {fileID: 0}
+  countNumberOfTimes: 0
+  txtCountNumberOfTimes: {fileID: 0}
 --- !u!1 &322180274
 GameObject:
   m_ObjectHideFlags: 0

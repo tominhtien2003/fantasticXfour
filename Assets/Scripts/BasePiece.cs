@@ -113,6 +113,18 @@ public class BasePiece : MonoBehaviour
         }
         StartCoroutine(IETurnOffSelf(timer));
     }
+    public void TurnOffSelf2(float timer)
+    {
+        if (chessSide == ChessSide.Enemy)
+        {
+            GameLogic.Instance.enemyGroup.enemyList.Remove(this);
+        }
+        else
+        {
+            GameLogic.Instance.playerGroup.playerList.Remove(this);
+        }
+        StartCoroutine(IETurnOffSelf(timer));
+    }
     private IEnumerator IETurnOffSelf(float timer)
     {
         yield return new WaitForSeconds(timer);

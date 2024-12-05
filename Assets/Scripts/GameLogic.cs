@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 public class GameLogic : MonoBehaviour
@@ -17,6 +18,9 @@ public class GameLogic : MonoBehaviour
 
     public EnemyGroup enemyGroup;
     public PlayerGroup playerGroup;
+
+    public int countNumberOfTimes;
+    public TextMeshProUGUI txtCountNumberOfTimes;
     private void Awake()
     {
         if (instance == null)
@@ -80,12 +84,26 @@ public class GameLogic : MonoBehaviour
     }
     public void AutomaticChangeTurn()
     {
+        
         if (turn == Turn.Player)
         {
             SetTurn(Turn.Enemy);
         }
         else
         {
+            countNumberOfTimes++;
+            
+            countNumberOfTimes %= 4;
+            txtCountNumberOfTimes.text = "" + countNumberOfTimes;
+            if (countNumberOfTimes == 2)
+            {
+                TrapManager.Instance.OpenAllTraps();
+            }
+            else if (countNumberOfTimes == 0)
+            {
+                TrapManager.Instance.CloseAllTraps();
+            }
+
             SetTurn(Turn.Player);
         }
     }
