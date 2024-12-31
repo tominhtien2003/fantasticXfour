@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BaseTrap : MonoBehaviour
+public abstract class BaseTrap : MonoBehaviour , IVisitable
 {
+    public TrapType trapType;
     public static List<BaseTrap> traps = new List<BaseTrap>();
     protected Animator trapAnim;
     public void Open()
@@ -16,5 +17,10 @@ public abstract class BaseTrap : MonoBehaviour
     void OnDisable()
     {
         traps.Clear();
+    }
+
+    public void Accept(IVisitor visitor)
+    {
+        visitor.Visit(this);    
     }
 }

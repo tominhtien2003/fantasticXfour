@@ -22,22 +22,31 @@ public class TrapManager : MonoBehaviour
         foreach (var trap in BaseTrap.traps)
         {
             Block block = trap.GetComponentInParent<Block>();
-            if (block!=null && block.GetCurrentPiece() != null)
+            if (block != null)
             {
-                block.GetCurrentPiece().SetUpWhenIsTarget();
-                block.GetCurrentPiece()?.TurnOffSelf2(.5f);
-                block.SetCurrentPiece(null);
-
-                float timeDelay = 1f;
-                if (GameLogic.Instance.GetTurn() == Turn.Player)
+                BasePiece piece = block.GetCurrentPiece();
+                if (piece!= null)
                 {
-                    GameLogic.Instance.Invoke("AutomaticChangeTurn", timeDelay);
-                }
-                else
-                {
-                    GameLogic.Instance.Invoke("AutomaticChangeTurn", 0.5f);
+                    piece.pieceVisitor.SetCurrentBlock(block);
+                    trap.Accept(piece.pieceVisitor);
                 }
             }
+            //if (block!=null && block.GetCurrentPiece() != null)
+            //{
+            //    block.GetCurrentPiece().SetUpWhenIsTarget();
+            //    block.GetCurrentPiece()?.TurnOffSelf2(.5f);
+            //    block.SetCurrentPiece(null);
+
+            //    float timeDelay = 1f;
+            //    if (GameLogic.Instance.GetTurn() == Turn.Player)
+            //    {
+            //        GameLogic.Instance.Invoke("AutomaticChangeTurn", timeDelay);
+            //    }
+            //    else
+            //    {
+            //        GameLogic.Instance.Invoke("AutomaticChangeTurn", 0.5f);
+            //    }
+            //}
             block.tag = "CanNotMove";
             trap.Open();
         }

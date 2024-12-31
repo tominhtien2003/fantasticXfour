@@ -91,19 +91,21 @@ public class GameLogic : MonoBehaviour
         }
         else
         {
-            countNumberOfTimes++;
-            
-            countNumberOfTimes %= 4;
-            txtCountNumberOfTimes.text = "" + countNumberOfTimes;
-            if (countNumberOfTimes == 2)
+            if (txtCountNumberOfTimes != null)
             {
-                TrapManager.Instance.OpenAllTraps();
-            }
-            else if (countNumberOfTimes == 0)
-            {
-                TrapManager.Instance.CloseAllTraps();
-            }
+                countNumberOfTimes++;
 
+                countNumberOfTimes %= 4;
+                txtCountNumberOfTimes.text = "" + countNumberOfTimes;
+                if (countNumberOfTimes == 2)
+                {
+                    TrapManager.Instance.OpenAllTraps();
+                }
+                else if (countNumberOfTimes == 0)
+                {
+                    TrapManager.Instance.CloseAllTraps();
+                }
+            }
             SetTurn(Turn.Player);
         }
     }

@@ -1,9 +1,14 @@
 using UnityEngine;
-public class SpikeTrap : BaseTrap
+public class SpikeTrap : BaseTrap 
 {
+
     void Awake()
     {
         trapAnim = GetComponent<Animator>();
         traps.Add(this);
+    }
+    private void Start()
+    {
+        trapType = TrapType.Spike;
     }
 }

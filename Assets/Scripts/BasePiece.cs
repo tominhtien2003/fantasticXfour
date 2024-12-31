@@ -11,6 +11,7 @@ public class BasePiece : MonoBehaviour
     protected Block currentBlock;
     public PieceType pieceType;
     public ChessSide chessSide;
+    public PieceVisitor pieceVisitor = new PieceVisitor();
     private void Awake()
     {
         rb = GetComponentInChildren<Rigidbody>();
